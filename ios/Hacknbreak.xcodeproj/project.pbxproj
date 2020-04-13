@@ -397,7 +397,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Hacknbreak/Pods-Hacknbreak-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Hacknbreak/Pods-Hacknbreak-resources.sh",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -436,7 +436,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Hacknbreak/Pods-Hacknbreak-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hacknbreak/Pods-Hacknbreak-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		5D08D16D9C21D41932F81464 /* [CP] Check Pods Manifest.lock */ = {

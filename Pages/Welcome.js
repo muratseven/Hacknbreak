@@ -96,7 +96,7 @@ class Welcome extends Component {
           />
           <View flex={5}>
           <Text style={{ justifyContent: 'center',textAlign: 'center',paddingTop: h(6)}} >{item.text}</Text>
-          <Text style={{ opacity: 0.7,justifyContent: 'center',textAlign: 'center',fontSize:totalSize(1.2)}} >{item.descripton}</Text>
+          <Text style={{ color:'gray',marginTop:h(2),justifyContent: 'center',textAlign: 'center',fontSize:totalSize(1.2)}} >{item.descripton}</Text>
           </View>
       </Block>
         )}
@@ -126,7 +126,7 @@ class Welcome extends Component {
               flex={false}
               key={`step-${index}`}
               color="gray"
-              style={[styles.steps, { opacity }]}
+              style={[styles.steps, { opacity}]}
             />
           )
         })}
@@ -147,12 +147,12 @@ class Welcome extends Component {
             <Text center gray3>Açık İnovasyon Kampına Hoşgeldiniz</Text>
           </Block>
         </Block>
-        <Block flex={1} center middle>
+        <Block flex={1} center middle >
           {this.renderIllustrations()}
           {this.renderSteps()}
         </Block>
         <Block middle flex={0.5} margin={[0, theme.sizes.padding * 2]}>
-          <Button style={{ borderRadius: theme.sizes.padding *2,backgroundColor: theme.colors.orange,}}shadow onPress={() => Actions.Login2()}>
+          <Button style={{ borderRadius: theme.sizes.padding *2,backgroundColor: theme.colors.orange,}}shadow onPress={() => Actions.LoginPage()}>
             <Text center semibold h4>Başlayalım</Text>
           </Button>
         </Block>
@@ -207,7 +207,7 @@ descripton:{
 },
 stepsContainer: {
   position: 'absolute',
-  bottom: theme.sizes.base * 4,
+  bottom: theme.sizes.base * 7,
   right: 0,
   left: 0,
 },

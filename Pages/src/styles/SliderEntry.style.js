@@ -21,7 +21,7 @@ const entryBorderRadius = 8;
 export default StyleSheet.create({
     slideInnerContainer: {
         width: itemWidth,
-        height: slideHeight*1.4,
+        height: slideHeight*1.7,
         paddingHorizontal: itemHorizontalMargin,
         paddingBottom: 18 // needed for shadow
     },
@@ -54,6 +54,14 @@ export default StyleSheet.create({
         borderTopLeftRadius: entryBorderRadius,
         borderTopRightRadius: entryBorderRadius
     },
+    profile: {
+        height:50,
+        width:50,
+        borderRadius:25,
+    },
+    profileContainer: {
+        flexDirection:'row',
+    },
     // image's border radius is buggy on iOS; let's hack it!
     radiusMask: {
         position: 'absolute',
@@ -76,7 +84,7 @@ export default StyleSheet.create({
         borderBottomRightRadius: entryBorderRadius
     },
     textContainerEven: {
-        backgroundColor: colors.black
+        backgroundColor: 'white'
     },
     title: {
         color: colors.black,
@@ -85,7 +93,7 @@ export default StyleSheet.create({
         letterSpacing: 0.5
     },
     titleEven: {
-        color: 'white'
+        color: colors.black,
     },
     subtitle: {
         marginTop: 6,
@@ -94,6 +102,6 @@ export default StyleSheet.create({
         fontStyle: 'italic'
     },
     subtitleEven: {
-        color: 'rgba(255, 255, 255, 0.7)'
+        color: colors.gray,
     }
 });

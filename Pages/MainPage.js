@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, View, ScrollView,Image, Text, StatusBar, SafeAreaView } from 'react-native';
+import { Platform,ImageBackground, View, ScrollView,Image, Text, StatusBar, SafeAreaView } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { sliderWidth, itemWidth } from './src/styles/SliderEntry.style';
 import SliderEntry from './src/components/SliderEntry';
@@ -8,11 +8,13 @@ import { ENTRIES1, ENTRIES2 } from './src/static/entries';
 import { scrollInterpolators, animatedStyles } from './src/utils/animations';
 import { Container, Content, Card, Header, Body, Button, Left, Right,Title, CardItem } from 'native-base';
 const menu = require('../images/menu-icon.png');
+const Hacknbreak = require('../images/logohb.png');
+import { w, h, totalSize } from '../components/api/Dimensions';
 
 const IS_ANDROID = Platform.OS === 'android';
 const SLIDER_1_FIRST_ITEM = 0;
 
-export default class example extends Component {
+export default class MainPage extends Component {
 
     constructor (props) {
         super(props);
@@ -40,16 +42,26 @@ export default class example extends Component {
         const { slider1ActiveSlide } = this.state;
 
         return (
-          <Container style={{backgroundColor:'#2d88ad'}}>
-          <Header style={{backgroundColor:'#2d88ad'}} >
+          <ImageBackground
+          style={{flex: 1,
+          resizeMode: "cover",
+          justifyContent: "center"}}
+        source={{
+        uri: 'https://hacknbreak.com/wp-content/uploads/2019/11/IMG_4657.jpeg',
+        }}
+        >
+          <View style={{backgroundColor:'white',flexDirection:'row',paddingHorizontal:w(5),paddingTop:h(3),justifyContent:'center'}} >
           <Left >
           <Image
-            style={{height:24,width:24,marginBottom:16,marginLeft:24}}
+            style={{height:30,width:30,marginBottom:16,marginLeft:12}}
             source={menu}/>
             </Left>
-          <Title style={{backgroundColor:'#2d88ad',color:'white',fontSize:24}}>Etkinlikler</Title>
+            <Image
+              style={{height:h(6),justifyContent:'center',width:w(35),marginTop:-h(1)}}
+              source={Hacknbreak}/>
           <Right />
-            </Header>
+            </View>
+
             <View style={styles.exampleContainer}>
 
                 <Carousel
@@ -86,7 +98,7 @@ export default class example extends Component {
                 />
 
             </View>
-            </Container>
+            </ImageBackground>
 
         );
     }

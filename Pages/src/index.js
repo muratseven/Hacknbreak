@@ -92,7 +92,7 @@ export default class example extends Component {
                 <Text style={styles.title}>{`Example ${number}`}</Text>
                 <Text style={styles.subtitle}>{title}</Text>
                 <Carousel
-                  data={ENTRIES2}
+                  data={ENTRIES1}
                   renderItem={this._renderItem}
                   sliderWidth={sliderWidth}
                   itemWidth={itemWidth}

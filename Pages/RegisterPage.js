@@ -1,38 +1,77 @@
-import React from 'react';
-import {    StyleSheet,
+import React,{Component} from 'react';
+import {
+   StyleSheet,
    View,
    Image,
-   FlatList,
    Modal,
    Keyboard,
-   Dimensions,
    KeyboardAvoidingView,
    SafeAreaView,
+   TextInput,
+   Platform,
    TouchableWithoutFeedback,
    ScrollView,
-   Animated,} from 'react-native';
-import { Actions } from 'react-native-router-flux';
-import PhoneInput from 'react-native-phone-input'
-
+} from 'react-native';
 const Hackbreak = require('../images/logohb.png');
 const Image1 = require('../images/illustration_1.png');
 const Mail = require('../images/googlemail.png');
 const Google = require('../images/google.png');
+
 import {w, h, totalSize} from "../components/api/Dimensions";
 import { Button, Block, Text } from '../components';
 import { theme } from '../components/constants';
+import { Actions } from 'react-native-router-flux';
 
-export default class App extends React.Component {
+class RegisterPage extends Component {
+  static navigationOptions = {
+    header: null,
+  }
   state = {
+    show:false,
+    show2:true,
     showTerms: false,
     username: '',
+    user: {},
+    password:'Password123+-*',
     phone_number: '',
     confirmationCode: '',
-  };
+  }
+  showHideComponent = () =>{
+    if(this.state.show ==true){
+      this.setState({show:false,show2:true});
+    } else{
+      this.setState({show:true,show2:false});
+    }
+  }
   componentDidMount(){
     this.setState({
       //  pickerData: this.phone.getPickerData()
     })
+}
+onChangeText(key, value) {
+  this.setState({
+    [key]: value,
+  });
+}
+
+func =() =>{
+  this.signUp();
+  this.showHideComponent();
+
+}
+dogrula =() =>{
+  this.confirmSignUp();
+  this.confirmSignIn();
+  this.signIn();
+  Actions.Login();
+}
+
+onPressFlag(){
+    this.myCountryPicker.open()
+}
+
+selectCountry(country){
+    this.phone.selectCountry(country.iso2)
 }
 renderTermsService() {
   return (
@@ -82,76 +121,97 @@ renderTermsService() {
     </Modal>
   )
 }
-
-onPressFlag(){
-    this.myCountryPicker.open()
-}
-
-selectCountry(country){
-    this.phone.selectCountry(country.iso2)
-}
-  onChangeText(key, value) {
-    this.setState({
-      [key]: value,
-    });
-  }
-
   render() {
-    return (
-      <View style={styles.container}>
-        <TextInput
-          onChangeText={value => this.onChangeText('username', value)}
-          style={styles.input}
-          placeholder="username"
-        />
-        <TextInput
-          onChangeText={value => this.onChangeText('password', value)}
-          style={styles.input}
-          secureTextEntry={true}
-          placeholder="password"
-        />
-        <TextInput
-          onChangeText={value => this.onChangeText('phone_number', value)}
-          style={styles.input}
-          placeholder="phone"
-        />
+    const { navigation } = this.props;
 
-        <Button title="Sign Up" onPress={this.signUp.bind(this)} />
-        <TextInput
-          onChangeText={value => this.onChangeText('confirmationCode', value)}
-          style={styles.input}
-          placeholder="confirmation Code"
-        />
-        <Button
-          title="Confirm Sign Up"
-          onPress={this.confirmSignUp.bind(this)}
-        />
-      </View>
-    );
+    return (
+      <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : null}
+          style={{ flex: 1, backgroundColor: "#2d88ad"}}>
+        <SafeAreaView style={{ flex: 1}}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <Block style={{backgroundColor: "#2d88ad",paddingTop:h(5)}}>
+                <Block style={styles.ImageContainer}>
+                  <Image
+                    style={styles.sectionTitle}
+                    source={Hackbreak}
+                    />
+                    <Text center style={{color:"white", fontSize:totalSize(1.4), width: w(70), opacity: 0.7,paddingTop: h(5)}}>Yeni bir hesap oluşturmak veya giriş yapmak için telefon numaranı girmelisin.</Text>
+                </Block>
+                <View>
+                {this.state.show2?(
+                  <TextInput
+                    onChangeText={value => this.onChangeText('username', value)}
+                    style={styles.input}
+                    placeholderTextColor="gray"
+                    placeholder="Ad Soyad"
+                  />
+                ):null}
+                <TextInput
+                  onChangeText={value => this.onChangeText('phone_number', value)}
+                  style={styles.input}
+                  placeholderTextColor="gray"
+                  placeholder="+905*********"
+                />
+                {this.state.show ?(
+                  <TextInput
+                    onChangeText={value => this.onChangeText('confirmationCode', value)}
+                    style={styles.input}
+                    placeholderTextColor="gray"
+                    placeholder="doğrulama kodu"
+                  />
+                ):null}
+                </View>
+                <Block center style={{paddingBottom: h(3)}}>
+                {this.state.show ? (
+                  <Button onPress={this.dogrula } style={{width: w(60),height: h(7),marginTop: h(1),borderRadius: theme.sizes.padding *2,backgroundColor: theme.colors.orange,}}shadow >
+                    <Text center semibold h4>Doğrula ve Kayıt ol</Text>
+                  </Button>
+                ):null}
+                {this.state.show2 ?(
+                  <Button onPress={this.func} style={{width: w(60),height: h(7),marginTop: h(3),borderRadius: theme.sizes.padding *2,backgroundColor: '#dba606',}}shadow >
+                    <Text center semibold h4 style={{color:'black'}}>Devam Et</Text>
+                  </Button>
+                ):null}
+                </Block>
+          <Button style={{backgroundColor: "transparent",marginTop: h(7)}} onPress={() => this.setState({ showTerms: true })}>
+            <Text center caption white style={{opacity: 0.7}}>By signing up, you confirm{"\n"} the Terms of Service</Text>
+         </Button>
+         <Button style={{backgroundColor: "transparent"}} onPress={() => Actions.FirstPage()}>
+           <Text right caption white style={{opacity: 0.6,paddingRight: w(15)}}>Girişi Atla</Text>
+        </Button>
+        {this.renderTermsService()}
+      </Block>
+    </TouchableWithoutFeedback>
+  </SafeAreaView>
+</KeyboardAvoidingView>
+    )
   }
 }
 
 const styles = StyleSheet.create({
-  input: {
-    height: 50,
-    borderBottomColor: '#2196F3',
-    margin: 10,
-  },
-  sectionTitle:{
-    height: 100,
-    width: 250
-  },
-  ImageContainer:{
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: h(7),
-    marginHorizontal: w(20),
-    marginVertical: h(15)
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    padding: 16,
-  },
+sectionTitle:{
+  height: 100,
+  width: 250
+},
+input: {
+  color:'black',
+  backgroundColor:'white',
+  borderRadius:totalSize(5),
+  width: w(70),
+  paddingHorizontal: 30,
+  marginBottom: 20,
+  alignSelf: 'center',
+  borderWidth: 1,
+  height: h(7.5)
+},
+ImageContainer:{
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingBottom: h(1),
+  marginHorizontal: w(20),
+  marginVertical: h(1)
+},
 });
+
+export default RegisterPage;

@@ -33,7 +33,7 @@ target 'Hacknbreak' do
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
-
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   # add the Firebase pod for Google Analytics
   pod 'Firebase/Analytics'
   pod 'Firebase/Auth'
@@ -43,7 +43,6 @@ target 'Hacknbreak' do
   platform :ios, '9.0'
   pod 'Firebase/Core', '~> 6.8.1'
 
-  pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
 
   target 'HacknbreakTests' do
     inherit! :search_paths

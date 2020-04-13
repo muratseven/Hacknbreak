@@ -15,15 +15,14 @@ import {
 const Hackbreak = require('../images/logohb.png');
 const Image1 = require('../images/illustration_1.png');
 const Mail = require('../images/googlemail.png');
-import { Auth } from 'aws-amplify';
-
 const Google = require('../images/google.png');
+
 import {w, h, totalSize} from "../components/api/Dimensions";
 import { Button, Block, Text } from '../components';
 import { theme } from '../components/constants';
 import { Actions } from 'react-native-router-flux';
 
-class Login2 extends Component {
+class LoginPage extends Component {
   static navigationOptions = {
     header: null,
   }
@@ -54,39 +53,7 @@ onChangeText(key, value) {
     [key]: value,
   });
 }
-signIn() {
-  const { username, password } = this.state;
-  Auth.signIn(username, password)
-    .then(user => {
-      this.setState({ user });
-      console.log('successful sign in!');
-    })
-    .catch(err => console.log('error signing in!: ', err));
-}
-confirmSignUp() {
-  Auth.confirmSignUp(this.state.username, this.state.confirmationCode)
-    .then(() => console.log('successful confirm sign up!...1'))
-    .catch(err => console.log('error confirming signing up!: ', err));
-}
-confirmSignIn() {
-  Auth.confirmSignIn(this.state.user, this.state.confirmationCode)
-    .then(() => {
-      console.log('successful confirm sign in!2222');
-      this.props.screenProps.authenticate(true);
-    })
-    .catch(err => console.log('error confirming signing in!: ', err));
-}
-signUp() {
-  Auth.signUp({
-    username: this.state.username,
-    password: this.state.password,
-    attributes: {
-      phone_number: this.state.phone_number,
-    },
-  })
-    .then(() => console.log('successful sign up!'))
-    .catch(err => console.log('error signing up!: ', err));
-}
+
 func =() =>{
   this.signUp();
   this.showHideComponent();
@@ -97,7 +64,6 @@ dogrula =() =>{
   this.confirmSignIn();
   this.signIn();
   Actions.Login();
-
 }
 
 onPressFlag(){
@@ -207,8 +173,6 @@ renderTermsService() {
                     <Text center semibold h4 style={{color:'black'}}>Devam Et</Text>
                   </Button>
                 ):null}
-
-
                 </Block>
           <Button style={{backgroundColor: "transparent",marginTop: h(7)}} onPress={() => this.setState({ showTerms: true })}>
             <Text center caption white style={{opacity: 0.7}}>By signing up, you confirm{"\n"} the Terms of Service</Text>
@@ -250,4 +214,4 @@ ImageContainer:{
 },
 });
 
-export default Login2;
+export default LoginPage;
