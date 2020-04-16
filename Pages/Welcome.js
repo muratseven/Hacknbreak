@@ -145,7 +145,7 @@ class Welcome extends Component {
           <Text center gray3>Açık İnovasyon Kampına Hoşgeldiniz</Text>
           </Block>
         </Block>
-        <Block flex={1.2} center middle >
+        <Block flex={1.1} center middle >
           {this.renderIllustrations()}
           {this.renderSteps()}
         </Block>
