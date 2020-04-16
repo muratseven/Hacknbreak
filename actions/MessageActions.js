@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native';
 import {
-    LOADING_FALSE, 
+    LOADING_FALSE,
     alert,
     USER,
     USER_START,
@@ -10,7 +10,7 @@ import { Actions } from 'react-native-router-flux';
 
 export const setMessage = (mekan) => {
     return(dispatch) => {
-        
+
         dispatch({
             type: USER_START
         });
@@ -19,8 +19,8 @@ export const setMessage = (mekan) => {
         firebase.database().ref(`/${mekan}/`)
                 .set(params)
                 .then(() => {
-                   Actions.Login();
+                   Actions.LoginPage();
                 });
 
-    }  
+    }
 }

@@ -2,7 +2,6 @@ import { AsyncStorage ,Alert} from 'react-native';
 import {
     LOADING_FALSE, alert,
     USER,
-
     REGISTER_START,
     REGISTER_SUCCESS} from './types';
 import firebase from 'firebase';
@@ -10,12 +9,7 @@ import { Actions } from 'react-native-router-flux';
 
 export const register = (userName, email, password) => {
     return(dispatch) => {
-
-
             if( userName!==undefined && email !== undefined && password !== undefined ){
-
-
-
               if(password.length<6){Alert.alert(
             'Uyarı',
             '6 karakter ya da daha fazla karakterli şifre kullanın !',
@@ -48,7 +42,7 @@ export const register = (userName, email, password) => {
                         firebase.database().ref(`/users/${user.user.uid}`)
                         .set(params)
                         .then(() => {
-                           Actions.Login();
+                           Actions.LoginPage();
                         });
 
                     })

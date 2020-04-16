@@ -26,12 +26,16 @@ import { w, h, totalSize } from '../../components/api/Dimensions';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Button, Block, Text } from '../../components';
 import { theme } from '../../components/constants';
+const Hackbreak = require('../../images/logohb.png');
+import { connect } from 'react-redux';
+import Buttonio from '../../components/common/Button';
+import { login } from '../../actions';
 
 import eyeImg from '../../images/user-2.png';
 import password from '../../images/lock.png';
 
 const MARGIN = 45;
-export default class Form extends Component {
+class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,6 +49,13 @@ export default class Form extends Component {
       showPass: true,
       press: false,
       username: '',
+      isNameCorrect: false,
+      isEmailCorrect: false,
+      isPasswordCorrect: false,
+      isRepeatCorrect: false,
+      isCreatingAccount: false,
+      email: '',
+      password: '',
       users: [],
     };
     this.buttonAnimated = new Animated.Value(0);
@@ -56,6 +67,61 @@ export default class Form extends Component {
       this.setState({ showPass: false, press: true });
     } else {
       this.setState({ showPass: true, press: false });
+    }
+  };
+  createUserAccount = () => {
+    const name = this.name.getInputValue();
+    const email = this.email.getInputValue();
+    const password = this.password.getInputValue();
+    const repeat = this.repeat.getInputValue();
+
+    this.setState({
+      isNameCorrect: name === '',
+      isEmailCorrect: email === '',
+      isPasswordCorrect: password === '',
+      isRepeatCorrect: repeat === '' || repeat !== password,
+    }, () => {
+      if(name !== '' && email !== '' && password !== '' && (repeat !== '' && repeat === password)){
+        this.createFireBaseAccount(name, email, password);
+      } else {
+        Alert.alert(
+  'Uyarı',
+  'Lütfen Boş Alanları Doldurun !',
+  [
+    {text: 'Tamam', onPress: () => console.log('OK Pressed')},
+  ],
+  { cancelable: false }
+)
+      }
+    })
+  };
+  createFireBaseAccount = (name, email, password) => {
+    this.setState({ isCreatingAccount: true });
+    Firebase.createFirebaseAccount(name, email, password)
+      .then(result => {
+        if(result) this.props.change('login')();
+        this.setState({ isCreatingAccount: false });
+      });
+  };
+  changeInputFocus = name => () => {
+    switch (name) {
+      case 'Name':
+        this.setState({ isNameCorrect: this.name.getInputValue() === '' });
+        this.email.input.focus();
+        break;
+      case 'Email':
+        this.setState({ isEmailCorrect: this.email.getInputValue() === '' });
+        this.password.input.focus();
+        break;
+      case 'Password':
+        this.setState({ isPasswordCorrect: this.password.getInputValue() === '',
+          isRepeatCorrect: (this.repeat.getInputValue() !== ''
+            && this.repeat.getInputValue() !== this.password.getInputValue()) });
+        this.repeat.input.focus();
+        break;
+      default:
+        this.setState({ isRepeatCorrect: (this.repeat.getInputValue() === ''
+            || this.repeat.getInputValue() !== this.password.getInputValue()) });
     }
   };
   renderAlert() {
@@ -256,17 +322,12 @@ else {
     const keyboardVerticalOffset = Platform.OS === 'ios' ? 40 : 0
 
     return (
-      <ImageBackground style={styles.picture} source={null}>
-      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={keyboardVerticalOffset} style={styles.container}>
+      <View style={styles.container}>
       <ScrollView style={styles.inputWrapper}>
       <View style={styles.container3}>
       <Image
-        source={require('../../images/logohb.png')}
-        style={{
-          width: w(60),
-          height: h(10),
-          marginTop: h(2),
-        }}
+        source={Hackbreak}
+        style={styles.sectionTitle}
       />
       </View>
       <View >
@@ -280,13 +341,15 @@ else {
           />
           <TextInput
             style={styles.input}
-            value={this.state.searchtext}
-            onChangeText={TextInputUserName =>
-              this.setState({ TextInputUserName })
+            value={this.state.email}
+            onChangeText={email =>
+              this.setState({ email })
             }
             onSubmitEditing={() => this.secondInput.focus()}
             placeholder={"E-mail"}
             placeholderTextColor="gray"
+            autoCapitalize={"none"}
+            keyboardType={"email-address"}
             ref={input => {
               this.textInput = input;
             }}
@@ -301,13 +364,13 @@ else {
               style={styles.inlineImg}
             />
           <TextInput
-            value={this.state.searchtext}
+            value={this.state.password}
             style={styles.input}
             ref={input => {
               this.textInput = input;
             }}
-            onChangeText={TextInputPassword =>
-              this.setState({ TextInputPassword })
+            onChangeText={password =>
+              this.setState({ password })
             }
             ref={ref => {
             this.secondInput = ref;
@@ -340,16 +403,11 @@ else {
         <Text right gray style={{justifyContent:'flex-end',textAlign:'right'}}>Şifremi Unuttum</Text>
         </View>
           <Animated.View style={{ width: changeWidth }}>
-            <TouchableOpacity
-              style={[styles.button,{color:'#3465d9'}]}
-              onPress={this._onPress}
-              activeOpacity={1}>
-              {this.state.isLoading ? (
-                <ActivityIndicator size="small" color="white" />
-              ) : (
-                <Text style={styles.text}>{"Giriş Yap"}</Text>
-              )}
-            </TouchableOpacity>
+          <Buttonio
+            title='Giriş Yap'
+            onClick={() => this.props.login(this.state.email, this.state.password)}
+            isCreating={this.props.loading}
+          />
             <Animated.View
               style={[styles.circle, { transform: [{ scale: changeScale }] }]}
             />
@@ -358,9 +416,9 @@ else {
           <TouchableOpacity
             activeOpacity={1}
             style={[styles.button1,{flexDirection:'row'}]}
-            onPress={() => this.renderAlert()}>
+            onPress={() => Actions.Register()}>
             <Text style={[styles.text,{color:'gray'}]}>Burada yeni misiniz ? </Text>
-            <Text style={[styles.text,{color:'#3465d9'}]}>Hesap oluştur</Text>
+            <Text style={[styles.text,{color:'#3465d9'}]}>Hesap Oluştur</Text>
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={1}
@@ -373,8 +431,7 @@ else {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      </KeyboardAvoidingView>
-      </ImageBackground>
+      </View>
 
     );
   }
@@ -392,6 +449,11 @@ const styles = StyleSheet.create({
     flex: 3,
     alignItems: 'center',
     justifyContent: 'flex-start',
+  },
+  sectionTitle: {
+    height: 100,
+    width: 250,
+    marginTop: h(2),
   },
   button: {
     alignItems: 'center',
@@ -479,3 +541,10 @@ const styles = StyleSheet.create({
     right: 32,
   },
 });
+const mapStateToProps = ({  responseLogin }) => {
+  const { loading, data } = responseLogin;
+  console.log(loading);
+  console.log(data);
+  return { loading, data } ;
+};
+export default connect(mapStateToProps, { login })(LoginForm);

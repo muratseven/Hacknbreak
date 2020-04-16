@@ -1,21 +1,19 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Logo from './Logo';
-import Form from './Form';
+import RegisterForm from './Form';
 import Wallpaper from './Wallpaper';
 import ButtonSubmit from './ButtonSubmit';
 import SignupSection from './SignupSection';
 import { Actions } from 'react-native-router-flux';
 
-export default class LoginScreen extends Component {
-  componentWillMount() {
-    Actions.refresh({drawerLockMode : 'locked-closed'})
-  }
+export default class RegisterScreen extends Component {
+
   render() {
     return (
       <Wallpaper>
         <Logo />
-        <Form />
+        <RegisterForm />
         <SignupSection />
       </Wallpaper>
     );

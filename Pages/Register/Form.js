@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Animated,
   Modal,
+  AsyncStorage,
   Platform,
   TextInput,
   ScrollView,
@@ -26,12 +27,17 @@ import { w, h, totalSize } from '../../components/api/Dimensions';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Button, Block, Text } from '../../components';
 import { theme } from '../../components/constants';
+const Hackbreak = require('../../images/logohb.png');
+import { connect } from 'react-redux';
+import { login, register } from '../../actions';
+import { LOGIN_LOCAL_ID } from '../../actions/types';
+import Buttonio from '../../components/common/Button';
 
 import eyeImg from '../../images/user-2.png';
 import password from '../../images/lock.png';
 
 const MARGIN = 45;
-export default class Form extends Component {
+class RegisterForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,7 +51,16 @@ export default class Form extends Component {
       show2:true,
       showPass: true,
       press: false,
-      username: '',
+      userName: '',
+      email: '',
+      password: '',
+      isNameCorrect: false,
+      isEmailCorrect: false,
+      isPasswordCorrect: false,
+      isRepeatCorrect: false,
+      isCreatingAccount: false,
+      saldo: '',
+      itemOne: false,
       users: [],
     };
     this.buttonAnimated = new Animated.Value(0);
@@ -171,6 +186,7 @@ else {
     setTimeout(() => {
       //NativeModules.DevSettings.reload();
     }, 2500);
+
   }
   _onGrow() {
     Animated.timing(this.growAnimated, {
@@ -183,9 +199,76 @@ else {
   }
 
   componentWillMount() {
-
-    const murat = this.state.TextInputUserName;
+    AsyncStorage.getItem(LOGIN_LOCAL_ID)
+        .then(req => JSON.parse(req))
+        .then(json => {
+          if (json !== null) {
+            console.log('Hereee');
+            console.log(json);
+            this.props.login(json.email, json.password);
+          } else {
+            this.setState({
+              isLogin: false
+            });
+          }
+    }).done();
   }
+  createUserAccount = () => {
+    const name = this.name.getInputValue();
+    const email = this.email.getInputValue();
+    const password = this.password.getInputValue();
+    const repeat = this.repeat.getInputValue();
+
+    this.setState({
+      isNameCorrect: name === '',
+      isEmailCorrect: email === '',
+      isPasswordCorrect: password === '',
+      isRepeatCorrect: repeat === '' || repeat !== password,
+    }, () => {
+      if(name !== '' && email !== '' && password !== '' && (repeat !== '' && repeat === password)){
+        this.createFireBaseAccount(name, email, password);
+      } else {
+        Alert.alert(
+  'Uyarı',
+  'Lütfen Boş Alanları Doldurun !',
+  [
+    {text: 'Tamam', onPress: () => console.log('OK Pressed')},
+  ],
+  { cancelable: false }
+)
+      }
+    })
+  };
+  createFireBaseAccount = (name, email, password) => {
+    this.setState({ isCreatingAccount: true });
+    Firebase.createFirebaseAccount(name, email, password)
+      .then(result => {
+        if(result) this.props.change('login')();
+        this.setState({ isCreatingAccount: false });
+      });
+  };
+  changeInputFocus = name => () => {
+    switch (name) {
+      case 'Name':
+        this.setState({ isNameCorrect: this.name.getInputValue() === '' });
+        this.email.input.focus();
+        break;
+      case 'Email':
+        this.setState({ isEmailCorrect: this.email.getInputValue() === '' });
+        this.password.input.focus();
+        break;
+      case 'Password':
+        this.setState({ isPasswordCorrect: this.password.getInputValue() === '',
+          isRepeatCorrect: (this.repeat.getInputValue() !== ''
+            && this.repeat.getInputValue() !== this.password.getInputValue()) });
+        this.repeat.input.focus();
+        break;
+      default:
+        this.setState({ isRepeatCorrect: (this.repeat.getInputValue() === ''
+            || this.repeat.getInputValue() !== this.password.getInputValue()) });
+    }
+  };
+
   componentDidMount() {
   }
   componentWillUnmount() {
@@ -248,21 +331,15 @@ else {
       inputRange: [0, 1],
       outputRange: [1, MARGIN],
     });
-    const mur = this.state.username;
     const keyboardVerticalOffset = Platform.OS === 'ios' ? 40 : 0
 
     return (
-      <ImageBackground style={styles.picture} source={null}>
-      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={keyboardVerticalOffset} style={styles.container}>
+      <View style={styles.container}>
       <ScrollView style={styles.inputWrapper}>
       <View style={styles.container3}>
       <Image
-        source={require('../../images/logohb.png')}
-        style={{
-          width: w(60),
-          height: h(10),
-          marginTop: h(2),
-        }}
+      source={Hackbreak}
+      style={styles.sectionTitle}
       />
       </View>
       <View >
@@ -276,9 +353,9 @@ else {
           />
           <TextInput
             style={styles.input}
-            value={this.state.searchtext}
-            onChangeText={TextInputUserName =>
-              this.setState({ TextInputUserName })
+            value={this.state.userName}
+            onChangeText={userName =>
+              this.setState({ userName })
             }
             onSubmitEditing={() => this.secondInput.focus()}
             placeholder={"Kullanıcı Adı"}
@@ -297,12 +374,14 @@ else {
           />
           <TextInput
             style={styles.input}
-            value={this.state.searchtext}
-            onChangeText={TextInputEmail =>
-              this.setState({ TextInputEmail })
+            value={this.state.email}
+            onChangeText={email =>
+              this.setState({ email })
             }
             onSubmitEditing={() => this.secondInput.focus()}
             placeholder={"E-mail"}
+            autoCapitalize={"none"}
+            keyboardType={"email-address"}
             placeholderTextColor="gray"
             ref={input => {
               this.textInput = input;
@@ -318,13 +397,13 @@ else {
               style={styles.inlineImg}
             />
           <TextInput
-            value={this.state.searchtext}
+            value={this.state.password}
             style={styles.input}
             ref={input => {
               this.textInput = input;
             }}
-            onChangeText={TextInputPassword =>
-              this.setState({ TextInputPassword })
+            onChangeText={password =>
+              this.setState({ password })
             }
             ref={ref => {
             this.secondInput = ref;
@@ -354,16 +433,13 @@ else {
 
         <View style={styles.container1}>
           <Animated.View style={{ width: changeWidth }}>
-            <TouchableOpacity
-              style={[styles.button,{color:'#3465d9'}]}
-              onPress={this._onPress}
-              activeOpacity={1}>
-              {this.state.isLoading ? (
-                <ActivityIndicator size="small" color="white" />
-              ) : (
-                <Text style={styles.text}>Kayıt Ol</Text>
-              )}
-            </TouchableOpacity>
+          <Buttonio
+            title='Hemen Kaydol'
+            onClick={() => this.props.register(this.state.userName,
+              this.state.email,this.state.password)
+            }
+            isCreating={this.props.loadingRegister}
+          />
             <Animated.View
               style={[styles.circle, { transform: [{ scale: changeScale }] }]}
             />
@@ -372,7 +448,7 @@ else {
           <TouchableOpacity
             activeOpacity={1}
             style={[styles.button1,{flexDirection:'row'}]}
-            onPress={() => this.renderAlert()}>
+            onPress={() => Actions.LoginPage()}>
             <Text style={[styles.text,{color:'gray'}]}>Hesabın var mı ? </Text>
             <Text style={[styles.text,{color:'#3465d9'}]}>Giriş Yap</Text>
           </TouchableOpacity>
@@ -387,8 +463,7 @@ else {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      </KeyboardAvoidingView>
-      </ImageBackground>
+      </View>
 
     );
   }
@@ -473,6 +548,11 @@ const styles = StyleSheet.create({
     left: 35,
     top: 9,
   },
+    sectionTitle: {
+      height: 100,
+      width: 250,
+      marginTop: h(2),
+    },
   picture: {
     flex: 1,
     width: null,
@@ -493,3 +573,9 @@ const styles = StyleSheet.create({
     right: 32,
   },
 });
+const mapStateToProps = ({  responseLogin, responseRegister }) => {
+  const { loading, data } = responseLogin;
+  const { loadingRegister } = responseRegister;
+  return { loading, data,loadingRegister } ;
+};
+export default connect(mapStateToProps, { login, register })(RegisterForm);

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform,ImageBackground, View, ScrollView,Image, Text, StatusBar, SafeAreaView } from 'react-native';
+import { Platform,AsyncStorage, TouchableOpacity, ImageBackground, View, ScrollView,Image, Text, StatusBar, SafeAreaView } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { sliderWidth, itemWidth } from './src/styles/SliderEntry.style';
 import SliderEntry from './src/components/SliderEntry';
@@ -10,11 +10,15 @@ import { Container, Content, Card, Header, Body, Button, Left, Right,Title, Card
 const menu = require('../images/menu-icon.png');
 const Hacknbreak = require('../images/logohb.png');
 import { w, h, totalSize } from '../components/api/Dimensions';
+import { connect } from 'react-redux';
+import { LOGIN_LOCAL_ID, USER } from '../actions/types';
+import { getUser } from '../actions';
+import { Actions } from 'react-native-router-flux';
 
 const IS_ANDROID = Platform.OS === 'android';
 const SLIDER_1_FIRST_ITEM = 0;
 
-export default class MainPage extends Component {
+class MainPage extends Component {
 
     constructor (props) {
         super(props);
@@ -25,6 +29,9 @@ export default class MainPage extends Component {
 
     _renderItem ({item, index}) {
         return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
+    }
+    componentWillMount() {
+      this.props.getUser();
     }
 
     _renderItemWithParallax ({item, index}, parallaxProps) {
@@ -98,6 +105,11 @@ export default class MainPage extends Component {
                 />
 
             </View>
+            <TouchableOpacity style={{margin:10}} onPress={() => {
+              AsyncStorage.setItem(LOGIN_LOCAL_ID, JSON.stringify(null));
+              Actions.LoginPage();}} iconRight>
+              <Text >Çıkış</Text>
+            </TouchableOpacity>
             </ImageBackground>
 
         );
@@ -129,3 +141,4 @@ export default class MainPage extends Component {
         );
     }
 }
+export default connect(null, { getUser })(MainPage);

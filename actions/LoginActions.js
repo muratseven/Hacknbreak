@@ -2,12 +2,10 @@ import { AsyncStorage } from 'react-native';
 import { LOGIN_START, LOGIN_SUCCESS,
     LOADING_FALSE, alert,
     USER, LOGIN_LOCAL_ID,
-
     REGISTER_START,
     REGISTER_SUCCESS} from './types';
 import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
-
 
 export const login = (email, password) => {
     return(dispatch) => {
@@ -24,7 +22,7 @@ export const login = (email, password) => {
                 type: LOGIN_SUCCESS,
                 payload: user
             });
-            Actions.Main({ type: 'reset' });
+            Actions.MainPage({ type: 'reset' });
             const json = {
                 email,
                 password

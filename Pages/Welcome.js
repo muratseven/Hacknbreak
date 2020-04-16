@@ -142,12 +142,10 @@ class Welcome extends Component {
           <Image
           style={styles.sectionTitle}
           source={Hackbreak}/>
-          </Block>
-          <Block flex={5}>
-            <Text center gray3>Açık İnovasyon Kampına Hoşgeldiniz</Text>
+          <Text center gray3>Açık İnovasyon Kampına Hoşgeldiniz</Text>
           </Block>
         </Block>
-        <Block flex={1} center middle >
+        <Block flex={1.2} center middle >
           {this.renderIllustrations()}
           {this.renderSteps()}
         </Block>
