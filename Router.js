@@ -6,13 +6,18 @@ import {
   Text,
 } from 'react-native';
 const { width, height } = Dimensions.get('window');
-import { Scene, Router,Drawer} from 'react-native-router-flux';
+import { Scene, Router,Drawer, Stack} from 'react-native-router-flux';
 import Welcome from './Pages/Welcome';
 import Login from './Pages/LoginPage';
 import RegisterScreen from './Pages/Register/Form';
 import MainPage from './Pages/MainPage';
 import LoginScreen from './Pages/Login/Form';
 import ChatScreen from './Pages/ChatScreen';
+import Orders from './Pages/Orders';
+import Buy from './Pages/Buy';
+import Setting from './Pages/Setting';
+
+
 
 const RouterComponenet: () => React$Node = () => {
   return (
@@ -21,6 +26,7 @@ const RouterComponenet: () => React$Node = () => {
     titleStyle={styles.navTitle}
     sceneStyle={styles.firstScreen}
     >
+  
      <Scene
       key="Root"
       sceneStyle={styles.firstScreen}
@@ -68,6 +74,13 @@ const styles = StyleSheet.create({
 
   navBar: {
   },
+  tabBar: {
+height: 50,
+borderTopColor: 'darkgrey',
+borderTopWidth: 1,
+opacity: 0.98,
+justifyContent:'space-between'
+},
   navTitle: {
     color: '#8C95A7',
     fontSize: 17,

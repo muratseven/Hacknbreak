@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native';
 import {
-    LOADING_FALSE, 
+    LOADING_FALSE,
     alert,
     USER,
     USER_START,
@@ -10,7 +10,7 @@ import { Actions } from 'react-native-router-flux';
 
 export const getUser = () => {
     return(dispatch) => {
-        
+
         dispatch({
             type: USER_START
         });
@@ -21,13 +21,13 @@ export const getUser = () => {
             .on('value', snapshot => {
                 console.log('gelen Data');
                 console.log(snapshot.val());
-            
+
             USER.user_info = snapshot.val();
 
-            // dispatch({ type: USER_SUCCESS, 
+            // dispatch({ type: USER_SUCCESS,
             //     payload: snapshot.val() });
             // });
         });
 
-    }  
+    }
 }

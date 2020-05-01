@@ -14,7 +14,11 @@ import { connect } from 'react-redux';
 import { LOGIN_LOCAL_ID, USER } from '../actions/types';
 import { getUser } from '../actions';
 import { Actions } from 'react-native-router-flux';
-
+import Icon from 'react-native-vector-icons/Ionicons';
+import BottomNavigation, {
+  IconTab,
+  FullTab
+} from 'react-native-material-bottom-navigation'
 const IS_ANDROID = Platform.OS === 'android';
 const SLIDER_1_FIRST_ITEM = 0;
 
@@ -23,9 +27,59 @@ class MainPage extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            slider1ActiveSlide: SLIDER_1_FIRST_ITEM
+            slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
+             activeTab: 'games'
         };
     }
+
+ tabs = [
+  {
+    key: 'games',
+    label: 'Yemekler',
+    barColor: '#388E3C',
+    pressColor: 'rgba(255, 255, 255, 0.16)',
+    icon: 'md-pizza'
+  },
+  {
+    key: 'movies-tv',
+    label: 'Anasayfa',
+    barColor: '#00695C',
+    pressColor: 'rgba(255, 255, 255, 0.16)',
+    icon: 'ios-home'
+  },
+  {
+    key: 'music',
+    label: 'Bildirimler',
+    barColor: '#6A1B9A',
+    pressColor: 'rgba(255, 255, 255, 0.16)',
+    icon: 'md-notifications'
+  },
+  {
+    key: 'books',
+    label: 'Profil',
+    barColor: '#1565C0',
+    pressColor: 'rgba(255, 255, 255, 0.16)',
+    icon: 'md-person'
+  }
+]
+state = {
+activeTab: this.tabs[0].key
+}
+renderIcon = icon => ({ isActive }) => (
+  <View >
+  <Icon size={24} color="white" name={icon} />
+  </View>
+)
+
+
+renderTab = ({ tab, isActive }) => (
+  <IconTab
+    isActive={isActive}
+    key={tab.key}
+    label={tab.label}
+    renderIcon={this.renderIcon(tab.icon)}
+  />
+)
 
     _renderItem ({item, index}) {
         return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
@@ -49,25 +103,28 @@ class MainPage extends Component {
         const { slider1ActiveSlide } = this.state;
 
         return (
-          <ImageBackground
+          <View
           style={{flex: 1,
-          resizeMode: "cover",
-          justifyContent: "center"}}
-        source={{
-        uri: 'https://hacknbreak.com/wp-content/uploads/2019/11/IMG_4657.jpeg',
-        }}
+          }}
+
         >
           <View style={{backgroundColor:'white',flexDirection:'row',paddingHorizontal:w(5),paddingTop:h(3),justifyContent:'center'}} >
           <Left >
-          <Image
-            style={{height:30,width:30,marginBottom:16,marginLeft:12}}
-            source={menu}/>
+          {
+            /*
+            <Image
+              style={{height:30,width:30,marginBottom:16,marginLeft:12}}
+              source={menu}/>
+            */
+          }
             </Left>
             <Image
-              style={{height:h(6),justifyContent:'center',width:w(35),marginTop:-h(1)}}
+              style={{height:h(8),justifyContent:'center',width:w(45),marginTop:-h(1)}}
               source={Hacknbreak}/>
           <Right />
             </View>
+
+
 
             <View style={styles.exampleContainer}>
 
@@ -91,18 +148,22 @@ class MainPage extends Component {
                   autoplayInterval={3000}
                   onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
                 />
-                <Pagination
-                  dotsLength={ENTRIES1.length}
-                  activeDotIndex={slider1ActiveSlide}
-                  containerStyle={styles.paginationContainer}
-                  dotColor={'rgba(255, 255, 255, 0.92)'}
-                  dotStyle={styles.paginationDot}
-                  inactiveDotColor={colors.black}
-                  inactiveDotOpacity={0.4}
-                  inactiveDotScale={0.6}
-                  carouselRef={this._slider1Ref}
-                  tappableDots={!!this._slider1Ref}
-                />
+                {
+                  /*
+                  <Pagination
+                    dotsLength={ENTRIES1.length}
+                    activeDotIndex={slider1ActiveSlide}
+                    containerStyle={styles.paginationContainer}
+                    dotColor={'rgba(255, 255, 255, 0.92)'}
+                    dotStyle={styles.paginationDot}
+                    inactiveDotColor={colors.black}
+                    inactiveDotOpacity={0.4}
+                    inactiveDotScale={0.6}
+                    carouselRef={this._slider1Ref}
+                    tappableDots={!!this._slider1Ref}
+                  />
+                  */
+                }
 
             </View>
             <TouchableOpacity style={{margin:10}} onPress={() => {
@@ -110,7 +171,7 @@ class MainPage extends Component {
               Actions.LoginPage();}} iconRight>
               <Text >Çıkış</Text>
             </TouchableOpacity>
-            </ImageBackground>
+            </View>
 
         );
     }
@@ -128,14 +189,28 @@ class MainPage extends Component {
                       barStyle={'light-content'}
                     />
 
-                    <ScrollView
+                    <View
                       style={styles.scrollview}
                       scrollEventThrottle={200}
                       directionalLockEnabled={true}
                     >
                         { example1 }
 
-                    </ScrollView>
+                    </View>
+                    <BottomNavigation
+                      tabs={this.tabs}
+                      activeTab={this.state.activeTab}
+                      onTabPress={newTab => this.setState({ activeTab: newTab.key })}
+                      renderTab={({ tab, isActive }) => (
+                        <FullTab
+                          isActive={isActive}
+                          key={tab.key}
+                          label={tab.label}
+                          renderIcon={() => <Icon name={tab.icon} size={24} color="white" />}
+                          />
+                        )}
+                        useLayoutAnimation
+                        />
                 </View>
             </SafeAreaView>
         );

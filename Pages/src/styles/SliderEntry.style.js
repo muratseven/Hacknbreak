@@ -21,9 +21,28 @@ const entryBorderRadius = 8;
 export default StyleSheet.create({
     slideInnerContainer: {
         width: itemWidth,
-        height: slideHeight*1.7,
-        paddingHorizontal: itemHorizontalMargin,
+        //backgroundColor: 'red',
+        //height: slideHeight*1.7,
+        //paddingHorizontal: itemHorizontalMargin,
         paddingBottom: 18 // needed for shadow
+    },
+    spesificButton:{
+      fontSize:16,
+      borderBottomLeftRadius: entryBorderRadius*4,
+      borderBottomRightRadius: entryBorderRadius*4,
+        width: itemWidth,
+        height: slideHeight/5,
+        justifyContent:'center',
+        textAlign:'center',
+        alignSelf:'center',
+        borderWidth:1,
+        fontWeight: '400',
+        borderColor: '#f7d646',
+        padding:4,
+
+        paddingHorizontal:12,
+        flexDirection:'row',
+        backgroundColor: '#f7d646'
     },
     shadow: {
         position: 'absolute',
@@ -41,8 +60,8 @@ export default StyleSheet.create({
         flex: 1,
         marginBottom: IS_IOS ? 0 : -1, // Prevent a random Android rendering issue
         backgroundColor: 'white',
-        borderTopLeftRadius: entryBorderRadius,
-        borderTopRightRadius: entryBorderRadius
+        //borderTopLeftRadius: entryBorderRadius,
+        //borderTopRightRadius: entryBorderRadius
     },
     imageContainerEven: {
         backgroundColor: colors.black
@@ -51,13 +70,15 @@ export default StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
         resizeMode: 'cover',
         borderRadius: IS_IOS ? entryBorderRadius : 0,
-        borderTopLeftRadius: entryBorderRadius,
-        borderTopRightRadius: entryBorderRadius
+        //borderTopLeftRadius: entryBorderRadius,
+      //  borderTopRightRadius: entryBorderRadius
     },
     profile: {
         height:50,
         width:50,
         borderRadius:25,
+        justifyContent: 'center',
+        alignSelf: 'center'
     },
     profileContainer: {
         flexDirection:'row',
@@ -75,33 +96,37 @@ export default StyleSheet.create({
         backgroundColor: colors.black
     },
     textContainer: {
-        justifyContent: 'center',
+        //justifyContent: 'center',
         paddingTop: 20 - entryBorderRadius,
         paddingBottom: 20,
         paddingHorizontal: 16,
-        backgroundColor: 'white',
-        borderBottomLeftRadius: entryBorderRadius,
-        borderBottomRightRadius: entryBorderRadius
+        backgroundColor: '#5f30c7',
+        //borderRadius: entryBorderRadius*4,
+        borderTopLeftRadius: entryBorderRadius*4,
+        borderTopRightRadius: entryBorderRadius*4,
+        //borderBottomLeftRadius: entryBorderRadius,
+        //borderBottomRightRadius: entryBorderRadius
     },
     textContainerEven: {
-        backgroundColor: 'white'
+        backgroundColor: '#5f30c7'
     },
     title: {
-        color: colors.black,
-        fontSize: 13,
+        color: 'white',
+        fontSize: 16,
         fontWeight: 'bold',
         letterSpacing: 0.5
     },
     titleEven: {
-        color: colors.black,
+        color: 'white',
     },
     subtitle: {
         marginTop: 6,
-        color: colors.gray,
-        fontSize: 12,
-        fontStyle: 'italic'
+        fontWeight: '600',
+        letterSpacing: 0.2,
+        color: 'white',
+        fontSize: 16,
     },
     subtitleEven: {
-        color: colors.gray,
+        color: 'white',
     }
 });
