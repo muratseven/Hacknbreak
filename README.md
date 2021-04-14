@@ -27,30 +27,7 @@ Bu harika insanlara teşekkürler
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-## Yapılacaklar;
-Şifremi unuttum safyası tasarım ve kodlama
 
-Kullanım şartları tasarımı ve içeriği
-
-Seçilen etkinlikleri telefonun takvimine ekleme kodlaması
-
-Anasayfa etkinlik kartları tasarım
-
-Bildirim (Seçilen etkinliklerin gösterildiği) sayfası tasarım ve kodlaması
-
-Yemek listesi tasarım ve kodlaması
-
-Çıkış Butonunun nereye saklanacağı
-
-Etkinlik kartında katılımcı sayısının kodlaması
-
-Backend tarafında bütün Konuşmacıların listesini JSON formatına çevirme
-
-JSON formatında olan listeyi güncel tarih saat ile karşılaştırıp en güncel olanı ilk sıraya getirme backend kodlaması
-
-Sohbet (Chat ekranı) sayfasının tasarımı ve kodlanması
-
-Seçilen ve yaklaşan etkinliğin bildirim olarak kullanıcıya gönderilmesi
 
 <table>
   <tr>
