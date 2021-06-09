@@ -21,7 +21,6 @@
 Açık kaynak kodlu bu projeye katkıda bulunanları, yalnızca kod değil her türlü katkıyı tanıtmak için yapılmış bir sayfadır.
 
 ## Katkıda Bulunanlar Tablosu ✨
-Bu harika insanlara teşekkürler
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
